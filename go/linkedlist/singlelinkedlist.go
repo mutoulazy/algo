@@ -130,6 +130,83 @@ func (l *LinkedList) DeleteNode(p *ListNode) bool {
 	return true
 }
 
+// 链表反转 O(n)
+func (l *LinkedList) Reverse() {
+	// 至少有两个node
+	if nil == l.head || nil == l.head.next || nil == l.head.next.next {
+		return
+	}
+
+	var pre *ListNode = nil
+	cur := l.head.next
+	// 反转
+	for nil != cur {
+		tmp := cur.next
+		cur.next = pre
+		pre = cur
+		cur = tmp
+	}
+
+	l.head.next = pre
+}
+
+// 判断单链表是否有环 O(n)
+func (l *LinkedList) HasCycle() bool {
+	if nil != l.head {
+		slow := l.head
+		fast := l.head
+		for nil != fast && nil != fast.next {
+			slow = slow.next
+			fast = fast.next.next
+			if slow == fast {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// 删除倒数第N个节点 O(n)
+func (l *LinkedList) DeleteBottomN(n int) {
+	if n <= 0 || nil == l.head || nil == l.head.next {
+		return
+	}
+
+	fast := l.head
+	for i := 1; i <= n && fast != nil; i++ {
+		fast = fast.next
+	}
+
+	if nil == fast {
+		return
+	}
+
+	slow := l.head
+	for nil != fast.next {
+		slow = slow.next
+		fast = fast.next
+	}
+	slow.next = slow.next.next
+	l.length--
+}
+
+// 获取中间节点 O(n)
+func (l *LinkedList) FindMiddleNode() *ListNode {
+	if nil == l.head || nil == l.head.next {
+		return nil
+	}
+	if nil == l.head.next.next {
+		return l.head.next
+	}
+
+	slow, fast := l.head, l.head
+	for nil != fast && nil != fast.next {
+		slow = slow.next
+		fast = fast.next.next
+	}
+	return slow
+}
+
 //打印链表
 func (l *LinkedList) Print() {
 	cur := l.head.next
@@ -142,4 +219,37 @@ func (l *LinkedList) Print() {
 		}
 	}
 	fmt.Println(format)
+}
+
+// 两个有序单链表合并 O(n)
+func MergeSortedList(l1, l2 *LinkedList) *LinkedList {
+	if nil == l1 || nil == l1.head || nil == l1.head.next {
+		return l2
+	}
+	if nil == l2 || nil == l2.head || nil == l2.head.next {
+		return l1
+	}
+
+	l := &LinkedList{head: &ListNode{}}
+	cur := l.head
+	curl1 := l1.head.next
+	curl2 := l2.head.next
+	for nil != curl1 && nil != curl2 {
+		if curl1.value.(int) > curl2.value.(int) {
+			cur.next = curl2
+			curl2 = curl2.next
+		} else {
+			cur.next = curl1
+			curl1 = curl1.next
+		}
+		cur = cur.next
+	}
+
+	if nil != curl1 {
+		cur.next = curl1
+	} else if nil != curl2 {
+		cur.next = curl2
+	}
+
+	return l
 }
