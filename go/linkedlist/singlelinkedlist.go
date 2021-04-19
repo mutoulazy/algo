@@ -3,6 +3,7 @@ package linkedlist
 import "fmt"
 
 //单链表基本操作
+//head节点的value无意义
 type ListNode struct {
 	value interface{}
 	next  *ListNode
@@ -98,11 +99,8 @@ func (l *LinkedList) FindByIndex(index uint) *ListNode {
 	if index >= l.length {
 		return nil
 	}
-	if 0 == index {
-		return l.head
-	}
 	cur := l.head.next
-	var i uint = 1
+	var i uint = 0
 	for ; i < index; i++ {
 		cur = cur.next
 	}
