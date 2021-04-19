@@ -18,6 +18,16 @@ func TestInsertToTail(t *testing.T) {
 	l.Print()
 }
 
+func TestIReverse(t *testing.T) {
+	l := NewLinkedList()
+	for i := 0; i < 10; i++ {
+		l.InsertToTail(i + 1)
+	}
+	l.Print()
+	l.Reverse()
+	l.Print()
+}
+
 func TestFindByIndex(t *testing.T) {
 	l := NewLinkedList()
 	for i := 0; i < 10; i++ {
