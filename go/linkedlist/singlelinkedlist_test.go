@@ -1,6 +1,9 @@
 package linkedlist
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestInsertToHead(t *testing.T) {
 	l := NewLinkedList()
@@ -26,6 +29,24 @@ func TestIReverse(t *testing.T) {
 	l.Print()
 	l.Reverse()
 	l.Print()
+}
+
+func TestIReverse1(t *testing.T) {
+	l := NewLinkedList()
+	for i := 0; i < 10; i++ {
+		l.InsertToTail(i + 1)
+	}
+	l.Print()
+	newHead := Reverse(l.head.next)
+	format := ""
+	for nil != newHead {
+		format += fmt.Sprintf("%+v", newHead.GetValue())
+		newHead = newHead.next
+		if nil != newHead {
+			format += "->"
+		}
+	}
+	fmt.Println(format)
 }
 
 func TestFindByIndex(t *testing.T) {

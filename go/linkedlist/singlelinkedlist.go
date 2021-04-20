@@ -1,6 +1,8 @@
 package linkedlist
 
-import "fmt"
+import (
+	"fmt"
+)
 
 //单链表基本操作
 //head节点的value无意义
@@ -131,23 +133,66 @@ func (l *LinkedList) DeleteNode(p *ListNode) bool {
 }
 
 // 链表反转 O(n)
+// 参考 http://c.biancheng.net/view/8105.html
 func (l *LinkedList) Reverse() {
 	// 至少有两个node
 	if nil == l.head || nil == l.head.next || nil == l.head.next.next {
 		return
 	}
 
-	var pre *ListNode = nil
-	cur := l.head.next
-	// 反转
-	for nil != cur {
-		tmp := cur.next
-		cur.next = pre
-		pre = cur
-		cur = tmp
-	}
+	// 迭代反转法
+	//var pre *ListNode = nil
+	//cur := l.head.next
+	//end := l.head.next.next
+	//
+	//for {
+	//	//反转 mid 所指节点的指向
+	//	cur.next = pre
+	//	//此时判断 end 是否为 NULL，如果成立则退出循环
+	//	if nil == end {
+	//		break
+	//	}
+	//	//整体向后移动 3 个指针
+	//	pre = cur
+	//	cur = end
+	//	end = end.next
+	//}
+	////最后修改 head 头指针的指向
+	//l.head.next = cur
 
-	l.head.next = pre
+	// 头插法反转链表
+	//var newHead *ListNode = nil
+	//var temp *ListNode = nil
+	//head := l.head.next
+	//for nil != head {
+	//	// 老链表删除头
+	//	temp = head
+	//	head = head.next
+	//
+	//	// 头插法加入新链表
+	//	temp.next = newHead
+	//	newHead = temp
+	//}
+	////最后修改 l head 头指针的指向
+	//l.head.next = newHead
+
+	// 就地反转法
+	var beg *ListNode = nil
+	var end *ListNode = nil
+	head := l.head.next
+	beg = head
+	end = head.next
+	for nil != end {
+		// 原始链表删除end节点
+		beg.next = end.next
+		// end 节点插入头节点
+		end.next = head
+		head = end
+		// end向后移动
+		end = beg.next
+	}
+	l.head.next = head
+
 }
 
 // 判断单链表是否有环 O(n)
@@ -219,6 +264,19 @@ func (l *LinkedList) Print() {
 		}
 	}
 	fmt.Println(format)
+}
+
+// 递归反转链表
+func Reverse(head *ListNode) *ListNode {
+	if nil == head || nil == head.next {
+		return head
+	} else {
+		newHead := Reverse(head.next)
+
+		head.next.next = head
+		head.next = nil
+		return newHead
+	}
 }
 
 // 两个有序单链表合并 O(n)
